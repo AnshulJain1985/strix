@@ -120,7 +120,9 @@ def build_server() -> Any:
     the optional dependency is only needed when the server is actually launched.
     """
     try:
-        from mcp.server.fastmcp import FastMCP  # noqa: PLC0415 - optional dep, deferred
+        # Deferred import: 'mcp' is an optional dependency, only needed to run
+        # the server, so importing this module must not require it.
+        from mcp.server.fastmcp import FastMCP
     except ImportError as exc:  # pragma: no cover - dependency guard
         raise SystemExit(
             "The Strix MCP server needs the 'mcp' package. Install Strix with "
