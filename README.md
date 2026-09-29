@@ -135,6 +135,15 @@ npx skills add usestrix/strix
 
 This installs nine skills for running pentests, fixing findings, and CI scanning, against code, web apps, APIs, and the OWASP Top 10. Agents can use the local CLI or the managed cloud with the same engine.
 
+**Using [Claude Code](https://docs.claude.com/en/docs/claude-code)?** This repo is also a Claude Code plugin and marketplace — installing it registers the same nine skills plus `/strix` slash commands in one step:
+
+```text
+/plugin marketplace add usestrix/strix
+/plugin install strix@strix
+```
+
+Then use `/strix:scan`, `/strix:fix`, `/strix:cloud`, and `/strix:ci`, or just ask in plain language. See [Coding Agents](https://docs.strix.ai/integrations/coding-agents) for details.
+
 See [`AGENTS.md`](AGENTS.md) for the quick reference, [docs.strix.ai/llms.txt](https://docs.strix.ai/llms.txt) for the CLI, and [docs.app.strix.ai](https://docs.app.strix.ai) for the API.
 
 ---

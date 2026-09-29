@@ -1,0 +1,25 @@
+{
+  "name": "strix",
+  "version": "1.6.2",
+  "description": "Autonomous AI penetration testing inside Claude Code. Strix runs AI hacker agents that dynamically exploit and prove real vulnerabilities (OWASP Top 10 and beyond) in code, web apps, APIs, repos, URLs, domains, and IPs — self-hosted with the open-source CLI or via the managed app.strix.ai cloud.",
+  "author": {
+    "name": "Strix",
+    "email": "hi@usestrix.com",
+    "url": "https://strix.ai"
+  },
+  "homepage": "https://docs.strix.ai",
+  "repository": "https://github.com/usestrix/strix",
+  "license": "Apache-2.0",
+  "keywords": [
+    "security",
+    "pentest",
+    "penetration-testing",
+    "vulnerability",
+    "appsec",
+    "owasp",
+    "sast",
+    "dast",
+    "scanner",
+    "ai"
+  ]
+}

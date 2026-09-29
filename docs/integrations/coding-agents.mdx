@@ -31,6 +31,26 @@ Install a single skill with `npx skills add usestrix/strix --skill penetration-t
 npx skills use usestrix/strix@penetration-testing-with-strix | claude
 ```
 
+## Claude Code plugin
+
+The Strix repository is also a [Claude Code plugin](https://docs.claude.com/en/docs/claude-code/plugins) and its own [plugin marketplace](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces). Installing it registers all nine skills above **and** adds `/strix` slash commands, in one step. In Claude Code:
+
+```text
+/plugin marketplace add usestrix/strix
+/plugin install strix@strix
+```
+
+That's it — no `npx`, no clone. The plugin bundles the same skills, so Claude Code loads the right one automatically when you ask it to pentest, fix findings, or set up CI. It also adds four slash commands for when you'd rather be explicit:
+
+| Command | What it does |
+|---------|--------------|
+| `/strix:scan [target]` | Run an autonomous pentest against code, a repo, a web app, an API, a URL, a domain, or an IP |
+| `/strix:fix` | Triage Strix findings, patch the root cause, and re-run to verify each fix |
+| `/strix:cloud` | Drive a managed [app.strix.ai](https://app.strix.ai) scan via the `strix cloud` CLI — no local Docker or LLM key |
+| `/strix:ci` | Wire Strix PR scanning into GitHub Actions or any CI pipeline |
+
+To update to a newer release later, run `/plugin marketplace update strix`. The plugin itself doesn't install the Strix engine — the skills and commands use the [open-source CLI](https://docs.strix.ai) (`curl -sSL https://strix.ai/install | bash`, needs Docker) or the managed [app.strix.ai](https://app.strix.ai) cloud, exactly as described below.
+
 ## Two ways to run — self-hosted or managed
 
 Both use the same engine and produce the same validated findings and SARIF, so agents can pick per situation or combine them:

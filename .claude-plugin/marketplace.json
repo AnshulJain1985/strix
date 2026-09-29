@@ -1,0 +1,26 @@
+{
+  "name": "strix",
+  "owner": {
+    "name": "usestrix",
+    "url": "https://github.com/usestrix"
+  },
+  "metadata": {
+    "description": "Strix — autonomous AI penetration testing for Claude Code.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "strix",
+      "source": ".",
+      "description": "Autonomous AI pentesting: exploit and prove real vulnerabilities in code, web apps, APIs, repos, URLs, domains, and IPs — self-hosted CLI or managed app.strix.ai cloud. Bundles security skills and /strix slash commands.",
+      "category": "security",
+      "tags": [
+        "security",
+        "pentest",
+        "vulnerability",
+        "appsec",
+        "owasp"
+      ]
+    }
+  ]
+}
