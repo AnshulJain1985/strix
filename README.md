@@ -142,7 +142,7 @@ This installs nine skills for running pentests, fixing findings, and CI scanning
 /plugin install strix@strix
 ```
 
-Then use `/strix:scan`, `/strix:fix`, `/strix:cloud`, and `/strix:ci`, or just ask in plain language. See [Coding Agents](https://docs.strix.ai/integrations/coding-agents) for details.
+Then use `/strix:scan`, `/strix:fix`, `/strix:cloud`, and `/strix:ci`, or just ask in plain language. There's also **`/strix:hack`** — a no-API-key, no-Docker mode where Claude Code itself is the pentesting engine and findings are written in Strix's format (SARIF included) via a bundled MCP server. See [Coding Agents](https://docs.strix.ai/integrations/coding-agents) for details.
 
 See [`AGENTS.md`](AGENTS.md) for the quick reference, [docs.strix.ai/llms.txt](https://docs.strix.ai/llms.txt) for the CLI, and [docs.app.strix.ai](https://docs.app.strix.ai) for the API.
 

@@ -21,5 +21,20 @@
     "dast",
     "scanner",
     "ai"
-  ]
+  ],
+  "mcpServers": {
+    "strix": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "${CLAUDE_PLUGIN_ROOT}",
+        "--extra",
+        "mcp-server",
+        "python",
+        "-m",
+        "strix.mcp_server"
+      ]
+    }
+  }
 }
