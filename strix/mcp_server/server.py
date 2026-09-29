@@ -19,9 +19,14 @@ from __future__ import annotations
 import json
 import logging
 import os
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from strix.report import ReportState, set_global_report_state
+from strix.skills import get_available_skills, load_skills, validate_requested_skills
+
+
+if TYPE_CHECKING:
+    from mcp.server.fastmcp import FastMCP
 
 
 logger = logging.getLogger(__name__)
@@ -59,6 +64,53 @@ def _summarize(report: dict[str, Any]) -> dict[str, Any]:
         "endpoint": report.get("endpoint"),
         "finding_class": report.get("finding_class"),
     }
+
+
+def _register_knowledge_tools(mcp: FastMCP) -> None:
+    """Register the read-only Strix knowledge-pack tools on ``mcp``.
+
+    These expose the same reference material Strix's own agents load and need
+    no open engagement — the client may consult them freely while testing.
+    """
+
+    @mcp.tool()
+    def strix_list_skills() -> str:
+        """List Strix's built-in pentesting knowledge packs (the same reference
+        material Strix's own agents load).
+
+        Returns the catalog grouped by category (vulnerabilities, reconnaissance,
+        frameworks, protocols, technologies, tooling, ...), each with a name and
+        a one-line description. Load the bodies with ``strix_load_skill`` right
+        before testing a class or technology so you use the exact
+        payloads/workflow Strix would.
+        """
+        catalog = get_available_skills()
+        total = sum(len(v) for v in catalog.values())
+        return json.dumps({"count": total, "categories": catalog})
+
+    @mcp.tool()
+    def strix_load_skill(skills: list[str]) -> str:
+        """Load the full Markdown of one or more Strix knowledge packs as
+        reference material.
+
+        Use this before acting on a vulnerability class or technology to get
+        Strix's exact syntax, payloads, and workflow guidance. Names match the
+        bare files under ``strix/skills/<category>/<name>.md`` (e.g. "xss",
+        "sql_injection", "idor", "ssrf"); call ``strix_list_skills`` for the
+        catalog. Max 5 per call.
+
+        Args:
+            skills: Skill names to load (e.g. ["xss", "sql_injection"]).
+        """
+        requested = list(skills or [])
+        err = validate_requested_skills(requested)
+        if err:
+            return f"strix_load_skill: {err}"
+        contents = load_skills(requested)
+        if not contents:
+            return "strix_load_skill: no content loaded for requested skills."
+        sections = [f"## Skill: {name}\n\n{body}" for name, body in contents.items()]
+        return "\n\n---\n\n".join(sections)
 
 
 def build_server() -> Any:
@@ -271,6 +323,8 @@ def build_server() -> Any:
             if report.get("id") == report_id:
                 return json.dumps(report)
         return f"No finding with id {report_id}."
+
+    _register_knowledge_tools(mcp)
 
     @mcp.tool()
     def strix_finish_engagement(

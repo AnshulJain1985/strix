@@ -22,6 +22,7 @@ This is the **"Claude Code is the brain"** mode of Strix. Instead of Strix runni
 The plugin starts a stdio MCP server exposing these tools. If they are not available, tell the user the `strix` MCP server didn't start (it needs `uv` on PATH — the plugin launches `uv run --extra mcp-server python -m strix.mcp_server`) and stop.
 
 - `strix_begin_engagement(targets, authorization_confirmed, scope?, instructions?, scope_mode?)` — open the engagement. **Call this first.**
+- `strix_list_skills()` / `strix_load_skill(skills)` — browse and load Strix's built-in pentesting knowledge packs (75+ packs: vulnerability classes, recon, frameworks, protocols, technologies, tooling). These are the exact reference Strix's own agents use — no engagement required, consult them freely.
 - `strix_report_vulnerability(title, severity, description, ...)` — file one validated finding (writes artifacts immediately).
 - `strix_list_vulnerabilities()` / `strix_get_vulnerability(id)` — review what you've filed.
 - `strix_update_vulnerability(id, fields)` — revise a finding (e.g. add `fix_verification`).
@@ -43,6 +44,7 @@ Work like the relevant target-specific skill describes — those skills (`find-s
 - **Code / repo (white-box):** read the source, map routes/sinks/auth, trace data flow from untrusted input to dangerous sinks. Look for injection, broken access control / IDOR, SSRF, insecure deserialization, secrets in code, unsafe dependencies, and business-logic flaws. Confirm exploitability by reading the code path (and running it locally when safe).
 - **Live web app / API:** enumerate endpoints (from an OpenAPI/GraphQL schema when available, or by crawling), then test each class hands-on with real requests — auth bypass, BOLA/IDOR and other broken object/function-level authorization, injection, XSS, SSRF, mass assignment, and business logic. Use multiple accounts to prove access-control findings.
 - Use your shell, file tools, and HTTP/`curl` (and a browser when the app needs JS) to actually reproduce each issue.
+- **Lean on Strix's knowledge packs.** Before testing a specific class or stack, call `strix_load_skill` for the relevant pack (e.g. `["idor"]`, `["ssrf"]`, `["sql_injection"]`, `["jwt"]`, or a technology like `["firebase"]`) to get Strix's exact payloads and workflow. Call `strix_list_skills` first if you're unsure what's available.
 
 **Validate before you file.** Report only what you can prove with a concrete proof-of-concept — a request, a script, an observed response, or a precise code path. A theoretical concern with no PoC is a note to the user, not a `strix_report_vulnerability` call.
 
