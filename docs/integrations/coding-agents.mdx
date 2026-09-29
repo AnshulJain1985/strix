@@ -31,6 +31,39 @@ Install a single skill with `npx skills add usestrix/strix --skill penetration-t
 npx skills use usestrix/strix@penetration-testing-with-strix | claude
 ```
 
+## Claude Code plugin
+
+The Strix repository is also a [Claude Code plugin](https://docs.claude.com/en/docs/claude-code/plugins) and its own [plugin marketplace](https://docs.claude.com/en/docs/claude-code/plugin-marketplaces). Installing it registers all nine skills above **and** adds `/strix` slash commands, in one step. In Claude Code:
+
+```text
+/plugin marketplace add usestrix/strix
+/plugin install strix@strix
+```
+
+That's it — no `npx`, no clone. The plugin bundles the same skills, so Claude Code loads the right one automatically when you ask it to pentest, fix findings, or set up CI. It also adds slash commands for when you'd rather be explicit:
+
+| Command | What it does |
+|---------|--------------|
+| `/strix:hack [target]` | Pentest with **Claude Code itself as the engine** — no LLM API key, no Docker (see below) |
+| `/strix:scan [target]` | Run Strix's autonomous engine against code, a repo, a web app, an API, a URL, a domain, or an IP |
+| `/strix:fix` | Triage Strix findings, patch the root cause, and re-run to verify each fix |
+| `/strix:cloud` | Drive a managed [app.strix.ai](https://app.strix.ai) scan via the `strix cloud` CLI — no local Docker or LLM key |
+| `/strix:ci` | Wire Strix PR scanning into GitHub Actions or any CI pipeline |
+
+To update to a newer release later, run `/plugin marketplace update strix`.
+
+### Run with no API key — Claude Code is the engine
+
+`/strix:scan` and `/strix:cloud` drive Strix's own autonomous agents, which need either an LLM API key (self-hosted CLI, plus Docker) or an [app.strix.ai](https://app.strix.ai) account. **`/strix:hack` is different: your Claude Code model *is* the pentester.** You do the recon and exploitation with Claude Code's native tools (shell, file access, HTTP, browser), and findings are filed through a bundled **reporting MCP server** that reuses Strix's engine to write the exact same artifacts — `vulnerabilities.json`, per-finding Markdown, `findings.sarif` (SARIF 2.1.0), and `run.json` under `strix_runs/`.
+
+- **No separate LLM API key** — your own Claude Code model does the thinking.
+- **No Docker** — no sandbox; Claude Code uses its own tools.
+- **Same output** — the artifacts feed straight into CI, `/strix:fix`, and any SARIF consumer.
+
+The plugin declares an MCP server named `strix` that Claude Code launches with `uv run --extra mcp-server python -m strix.mcp_server`, so this mode only needs [`uv`](https://docs.astral.sh/uv/) on your PATH — no LLM key, no Docker, no cloud account. It's ideal for a quick review from inside Claude Code; for unattended, long-running, or proxy/browser-heavy autonomous scans, use `/strix:scan` (full engine) or `/strix:cloud` (managed).
+
+The other commands don't install the Strix engine — they use the [open-source CLI](https://docs.strix.ai) (`curl -sSL https://strix.ai/install | bash`, needs Docker) or the managed [app.strix.ai](https://app.strix.ai) cloud, exactly as described below.
+
 ## Two ways to run — self-hosted or managed
 
 Both use the same engine and produce the same validated findings and SARIF, so agents can pick per situation or combine them:

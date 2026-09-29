@@ -55,9 +55,13 @@ dependencies = [
 [project.optional-dependencies]
 vertex = ["google-auth>=2.0.0"]
 bedrock = ["boto3>=1.28.0"]
+# Reporting MCP server (`python -m strix.mcp_server`) used by the Claude Code
+# plugin's "Claude Code is the brain" mode — no LLM key or Docker required.
+mcp-server = ["mcp>=1.2.0"]
 
 [project.scripts]
 strix = "strix.interface.main:main"
+strix-mcp-server = "strix.mcp_server.server:main"
 
 [dependency-groups]
 dev = [
